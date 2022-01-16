@@ -3,14 +3,14 @@ def solicitud_variables():
 	# Precisión o número de bits???
 	while True:
 		try:
-			respuesta = str(input('Desea usar un precisión(P) o número de bits(B) para realizar los calculos?\n')).strip().upper()	
+			respuesta = str(input('Desea usar (P)recisión o número de (B)its para realizar los calculos?\n')).strip().upper()	
 			if respuesta not in ['P','B']:
 				print('La respuesta debe ser "P" o "B"')
 				continue
 			usar_precision = respuesta == 'P'
 			break
 		except:
-			print('Debe insertar un string válido.')
+			print('Debe insertar un string válido')
 			continue
 	# Número de variables
 	while True:	
@@ -57,7 +57,7 @@ def solicitud_variables():
 			# Precisión
 			while True:
 				try:
-					precision = int(input('Inserte la presición del sistema (cantidad de digitos despues del punto):  '))
+					precision = int(input('Inserte la presición de la variable (cantidad de digitos despues del punto):  '))
 					break
 				except:
 					print('la precision debe ser un numero de punto flotante. Ej: 0.00001')
