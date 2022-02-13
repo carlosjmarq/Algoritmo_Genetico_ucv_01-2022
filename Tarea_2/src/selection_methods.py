@@ -26,7 +26,7 @@ def poblacion_constructor(n: int):
 	poblacion = [
 		{
 			'individuo': 'ind_{}'.format(i),
-			'fitness': randint(low=1,high=1000),
+			'fitness': randint(low=1,high=50),
 		} for i in range(n)
 	]
 	sum_fitness = sum([ind['fitness'] for ind in poblacion])
