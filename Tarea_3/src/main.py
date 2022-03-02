@@ -18,11 +18,12 @@ if __name__=='__main__':
 		if respuesta == 1:
 			pob0 = poblacion_constructor(parametros['n_pob'] or 50, parametros['variables'])
 			if not parametros['n_gen']:
-				pob_final = AGS(f1 if parametros['funcion']=='1' else f2, parametros['variables'],max=parametros['max'],poblacion=pob0)
+				pob_final, mejor_ind = AGS(f1 if parametros['funcion']=='1' else f2, parametros['variables'],max_min=parametros['max_min'],poblacion=pob0)
 			else:
-				pob_final = AGS(f1 if parametros['funcion']=='1' else f2, parametros['variables'],max=parametros['max'],
+				pob_final, mejor_ind = AGS(f1 if parametros['funcion']=='1' else f2, parametros['variables'],max_min=parametros['max_min'],
 				n=parametros['n_pob'],n_gen=parametros['n_gen'],p_cruce=parametros['p_cruce'],
 				p_muta=parametros['p_muta'],poblacion=pob0)
 			pob0 = pob0[0:parametros['n_pob'] or 50]
 			imprimir_tabla(pob0,pob_final)
+			imprimir_mejor_ind(mejor_ind, pob_final)
 			continue

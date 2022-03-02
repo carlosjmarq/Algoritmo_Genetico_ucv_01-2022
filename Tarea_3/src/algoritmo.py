@@ -5,18 +5,20 @@ from individuos import Individuo
 from pprint import pprint
 from printers import *
 
-def AGS(func, variables, max=True, n=50, n_gen=100, p_cruce=0.8, p_muta=0.2, poblacion=None):
+def AGS(func, variables, max_min=True, n=50, n_gen=100, p_cruce=0.8, p_muta=0.2, poblacion=None):
 	#Generación de la primera población
 	if not poblacion:
 		poblacion = poblacion_constructor(n,variables)
+	mejor_ind = poblacion[0]
+	ronda = 0
 	#Evaluacion inicial
 	for ind in poblacion:
 		ind.reales = bits2float(ind.valor,variables)
-		ind.fitness = eval_fitness(ind,func,max)
+		ind.fitness = eval_fitness(ind,func,max_min)
 	for ind in poblacion:
 		ind.p_seleccion = ind.fitness/sum([indv.fitness for indv in poblacion])
 	#Inicio del ciclo
-	for iter in range(n_gen):
+	for iteracion in range(n_gen):
 		#mezclar poblacion
 		random.shuffle(poblacion)
 		#aplicar cruce1
@@ -24,8 +26,8 @@ def AGS(func, variables, max=True, n=50, n_gen=100, p_cruce=0.8, p_muta=0.2, pob
 			r = rand()
 			if r>p_cruce:
 				continue
-			for hijo in cruce_2_puntos(poblacion[i], poblacion[n//2+i]):
-				poblacion.append(hijo)
+			hijo1, hijo2 = cruce_2_puntos(poblacion[i], poblacion[n//2+i])
+			poblacion[i], poblacion[n//2+i] = hijo1, hijo2
 		#aplicar mutación
 		for ind in poblacion:
 			r = rand()
@@ -35,23 +37,21 @@ def AGS(func, variables, max=True, n=50, n_gen=100, p_cruce=0.8, p_muta=0.2, pob
 		#evaluar población
 		for ind in poblacion:
 			ind.reales = bits2float(ind.valor,variables)
-			ind.fitness = eval_fitness(ind,func,max)
+			ind.fitness = eval_fitness(ind,func,max_min)
 		for ind in poblacion:
 			ind.p_seleccion = ind.fitness/sum([indv.fitness for indv in poblacion])
 		#Aplicar seleccion
 		poblacion = muestreo_deterministico(poblacion)
-		#evaluar población
+		#Guardado del mejor individuo
 		for ind in poblacion:
-			ind.reales = bits2float(ind.valor,variables)
-			ind.fitness = eval_fitness(ind,func,max)
-		for ind in poblacion:
-			ind.p_seleccion = ind.fitness/sum([indv.fitness for indv in poblacion])
-		#ordenamiento y descarte de los menos aptos
-		fitness_list = [ind.fitness for ind in poblacion]
-		poblacion = quicksort(poblacion,fitness_list)
-		poblacion = poblacion[0:n]
-		imprimir_prueba(poblacion)
-	return poblacion
+			if ind.fitness > mejor_ind.fitness:
+				mejor_ind = ind
+				ronda = iteracion
+	best_ind = {
+		'ind': mejor_ind,
+		'ronda': ronda
+	}
+	return poblacion, best_ind
 
 variables = [
 	{'nombre':'x', 'limites': (-8,8), 'bits': 6},

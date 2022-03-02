@@ -180,8 +180,7 @@ def mutacion(ind: object):
 		ind.valor[i] = 1 if bit==0 else 0
 	return ind
 
-def eval_fitness(ind: object, func: object, max: bool):
-	if max:
+def eval_fitness(ind: object, func: object, max_min: bool):
+	if max_min == True:
 		return func(*ind.reales)
 	return 100/(1+func(*ind.reales))
-	pass
